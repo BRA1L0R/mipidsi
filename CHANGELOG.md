@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.10.0] - 2026-02-17
+
 ### Added
 
 - added `SpiInterface::release`
@@ -30,7 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - remove unused `nb` dependency
 - remove panic from `Builder::display_size` if invalid size is given
 
-## [0.9.0]
+## [v0.9.0] - 2025-01-10
 
 ### Added
 
