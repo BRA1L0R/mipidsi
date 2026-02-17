@@ -13,7 +13,7 @@ esp-backtrace = { version = "0.14", features = [
     "println",
 ] }
 esp-println = { version = "0.12", features = ["esp32c3"] }
-embedded-graphics = "0.8.0"
+embedded-graphics = "0.8.2"
 fugit = "0.3.7"
 embedded-hal-bus = "0.2.0"
 
