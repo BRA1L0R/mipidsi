@@ -2,13 +2,9 @@ use embedded_graphics_core::pixelcolor::Rgb565;
 use embedded_hal::delay::DelayNs;
 
 use crate::{
-    dcs::{
-        ExitSleepMode, InterfaceExt, SetAddressMode, SetDisplayOn
-    },
-    interface::{Interface, InterfaceKind},
-    models::{Model, ModelInitError},
-    options::ModelOptions,
-    ConfigurationError,
+    ConfigurationError, dcs::{
+        BitsPerPixel, ExitSleepMode, InterfaceExt, PixelFormat, SetAddressMode, SetDisplayOn, SetPixelFormat
+    }, interface::{Interface, InterfaceKind}, models::{Model, ModelInitError}, options::ModelOptions
 };
 
 /// ST7796 display in Rgb565 color mode.
@@ -44,6 +40,10 @@ impl Model for NV3007 {
         di.write_raw(0xFF, &[0xA5])?; // Enable private registers
         di.write_command(ExitSleepMode)?;
         delay.delay_ms(200);
+
+        //
+        //// Block below based on Arduino_GFX and other sources
+        //
 
         // Power and timing settings
         di.write_raw(0x9A, &[0x08])?;
@@ -175,10 +175,16 @@ impl Model for NV3007 {
         di.write_raw(0x44, &[0x00, 0x10])?;
         di.write_raw(0x46, &[0x10])?;
 
-        ///////
+        //
+        //// END INITIALIZATION BLOCK
+        // 
+
+        // Set orientation, etc.
+        di.write_command(madctl)?;
 
         // Pixel format
-        di.write_raw(0x3a,&[0x05])?; // Also pixel format?
+        let pf = PixelFormat::with_all(BitsPerPixel::from_rgb_color::<Self::ColorFormat>());
+        di.write_command(SetPixelFormat::new(pf))?;
 
         di.write_command(ExitSleepMode)?;
         delay.delay_ms(200);
