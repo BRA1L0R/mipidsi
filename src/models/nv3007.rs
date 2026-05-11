@@ -2,12 +2,17 @@ use embedded_graphics_core::pixelcolor::Rgb565;
 use embedded_hal::delay::DelayNs;
 
 use crate::{
-    ConfigurationError, dcs::{
-        BitsPerPixel, ExitSleepMode, InterfaceExt, PixelFormat, SetAddressMode, SetDisplayOn, SetPixelFormat
-    }, interface::{Interface, InterfaceKind}, models::{Model, ModelInitError}, options::ModelOptions
+    dcs::{
+        BitsPerPixel, ExitSleepMode, InterfaceExt, PixelFormat, SetAddressMode, SetDisplayOn,
+        SetInvertMode, SetPixelFormat,
+    },
+    interface::{Interface, InterfaceKind},
+    models::{Model, ModelInitError},
+    options::ModelOptions,
+    ConfigurationError,
 };
 
-/// ST7796 display in Rgb565 color mode.
+/// NV3007 display in Rgb565 color mode.
 pub struct NV3007;
 
 impl Model for NV3007 {
@@ -24,10 +29,7 @@ impl Model for NV3007 {
         DELAY: DelayNs,
         DI: Interface,
     {
-        if !matches!(
-            DI::KIND,
-            InterfaceKind::Serial4Line | InterfaceKind::Parallel8Bit | InterfaceKind::Parallel16Bit
-        ) {
+        if !matches!(DI::KIND, InterfaceKind::Serial4Line) {
             return Err(ModelInitError::InvalidConfiguration(
                 ConfigurationError::UnsupportedInterface,
             ));
@@ -165,22 +167,17 @@ impl Model for NV3007 {
         di.write_raw(0xF1, &[0x0E])?;
         di.write_raw(0xF9, &[0x56])?;
         di.write_raw(0xF2, &[0x26, 0x1B, 0x0B, 0x20])?;
-        di.write_raw(0xEC, &[0x04])?;  // repeated per original
-        
+        di.write_raw(0xEC, &[0x04])?; // repeated per original
 
         di.write_raw(0xFF, &[0x00])?; // Disable private registers
 
-        // Tearing effect and other settings
-        di.write_raw(0x35, &[0x00])?;
-        di.write_raw(0x44, &[0x00, 0x10])?;
-        di.write_raw(0x46, &[0x10])?;
-
         //
         //// END INITIALIZATION BLOCK
-        // 
+        //
 
         // Set orientation, etc.
         di.write_command(madctl)?;
+        di.write_command(SetInvertMode::new(options.invert_colors))?;
 
         // Pixel format
         let pf = PixelFormat::with_all(BitsPerPixel::from_rgb_color::<Self::ColorFormat>());
