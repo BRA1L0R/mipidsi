@@ -229,11 +229,10 @@ mod tests {
     use embedded_graphics::pixelcolor::Rgb565;
 
     use crate::{
-        Builder,
         _mock::{MockDelay, MockDisplayInterface},
         dcs::SetAddressMode,
         interface::InterfaceKind,
-        ConfigurationError, InitError,
+        Builder, ConfigurationError, InitError,
     };
 
     use super::*;
