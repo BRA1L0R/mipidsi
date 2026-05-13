@@ -19,6 +19,7 @@ mod ili934x;
 mod ili9486;
 mod ili9488;
 mod ili948x;
+mod nv3007;
 mod rm67162;
 mod st7735s;
 mod st7789;
@@ -31,6 +32,7 @@ pub use ili9341::*;
 pub use ili9342c::*;
 pub use ili9486::*;
 pub use ili9488::*;
+pub use nv3007::*;
 pub use rm67162::*;
 pub use st7735s::*;
 pub use st7789::*;
@@ -227,11 +229,10 @@ mod tests {
     use embedded_graphics::pixelcolor::Rgb565;
 
     use crate::{
-        Builder,
         _mock::{MockDelay, MockDisplayInterface},
         dcs::SetAddressMode,
         interface::InterfaceKind,
-        ConfigurationError, InitError,
+        Builder, ConfigurationError, InitError,
     };
 
     use super::*;
