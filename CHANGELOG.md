@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- added `NV3007N279` model support
 - added `NV3007` model support
 
 ## [v0.10.0] - 2026-02-17

@@ -42,7 +42,7 @@ Variants that require different screen sizes and window addressing offsets are n
 - ILI9342C
 - ILI9486
 - ILI9488
-- NV3007
+- NV3007 (`NV3007` standard and `NV3007N279` 2.79 inch variants)
 - RM67162
 - ST7735
 - ST7789
